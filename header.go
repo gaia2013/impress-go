@@ -7,8 +7,9 @@ import (
 
 func headers(w http.ResponseWriter, r *http.Request) {
 //  h := r.Header
-  h := r.Header["Accept-Encoding"]
-  fmt.Fprintln(w, h)
+//  h := r.Header["Accept-Encoding"]
+  h:= r.Header.Get("Accept-Encoding")
+fmt.Fprintln(w, h)
 }
 
 func main() {
