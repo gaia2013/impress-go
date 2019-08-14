@@ -7,7 +7,7 @@ import (
 
 func process(w http.ResponseWriter, r *http.Request) {
   t, _ := template.ParseFiles("tmpl.html")
-  t.Execute(w, r.FormValue("comment"))
+  t.Execute(w, template.HTML(r.FormValue("comment")))
 }
 func form(w http.ResponseWriter, r *http.Request) {
   t, _ := template.ParseFiles("form.html")
