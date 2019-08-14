@@ -5,11 +5,11 @@
     <title>Go Web Programming</title>
   </head>
   <body>
-    {{ if . }}
-      5より大きい数です！
-    {{ else }}
-      5以下の数です！
+    <ul>
+    {{ range . }}
+      <li>{{ . }}</li>
     {{ end }}
+    </ul>
   </body>
 </html>
 
