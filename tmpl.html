@@ -5,15 +5,7 @@
     <title>Go Web Programming</title>
   </head>
   <body>
-    <div>ドットの値は{{ . }}です</div>
-    <div>
-    {{ with ""}}
-      ドットは今、{{ . }}に設定されています
-    {{ else }}
-      ドットの値はやはり{{ . }}です
-    {{ end }}
-    </div>
-    <div>ドットの値は{{ . }}に戻りました</div>
+    <div>日付は {{ . | fdate . }} です</div>
   </body>
 </html>
 
