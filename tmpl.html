@@ -8,6 +8,8 @@
     <ul>
     {{ range . }}
       <li>{{ . }}</li>
+    {{ else }}
+      <li> 表示するものがありません </li>
     {{ end }}
     </ul>
   </body>
