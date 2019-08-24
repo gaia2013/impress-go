@@ -1,5 +1,5 @@
-drop table posts cascade if exists;
-drop table commnets if exists;
+drop table posts cascade ;
+drop table comments ;
 
 create table posts (
   id	  serial primary key,
