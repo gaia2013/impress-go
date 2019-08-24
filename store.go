@@ -35,7 +35,7 @@ func init() {
 }
 
 func main() {
-    post := Post{Content: "Hello World!", Author: "Sau Shong"}
+    post := Post{Content: "Hello World!", Author: "Sau Sheong"}
     fmt.Println(post)
 
     Db.Create(&post)
