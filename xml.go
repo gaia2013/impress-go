@@ -27,12 +27,12 @@ func main() {
       Name: "Sau Sheong",
     },
   }
-  output, err := xml.Marshal(&post) //	構造体を組み替えて(marshal)バイト列のXMLデータにする
+  output, err := xml.MarshalIndent(&post, "", "\t") //	構造体を組み替えて(marshal)バイト列のXMLデータにする
   if err != nil {
     fmt.Println("Error marshalling to XML:", err)
     return
   }
-  err = ioutil.WriteFile("post.xml", output, 0644)
+  err = ioutil.WriteFile("post.xml", []byte(xml.Header + string(output)), 0644)
   if err != nil {
     fmt.Println("Error writing XML to file:", err)
     return
