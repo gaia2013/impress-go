@@ -3,17 +3,17 @@ package main
 import (
   "encoding/xml"
   "fmt"
-  "io/ioutil"
+  "io"
   "os"
 )
 
 type Post struct {    //#A
-  XMLName xml.Name  `xml:"post"`
-  Id	  string    `xml:"id,attr"`
-  Content string    `xml:"content"`
-  Author  Author    `xml:"author"`
-  Xml	  string    `xml:",innerxml"`
-  Comments  []Comment `xml:"comments>comment"`
+  XMLName  xml.Name  `xml:"post"`
+  Id	   string    `xml:"id,attr"`
+  Content  string    `xml:"content"`
+  Author   Author    `xml:"author"`
+  Xml	   string    `xml:",innerxml"`
+  Comments []Comment `xml:"comments>comment"`
 }
 
 type Author struct {
@@ -34,13 +34,25 @@ func main() {
     return
   }
   defer xmlFile.Close()
-  xmlData, err := ioutil.ReadAll(xmlFile)
-  if err != nil {
-    fmt.Println("Error reading XML data:", err)
-    return
-  }
 
-  var post Post
-  xml.Unmarshal(xmlData, &post)
-  fmt.Println(post)
+  decoder := xml.NewDecoder(xmlFile)  // XMLデータからデコーダ(decoder）を生成
+  for { // decoder内のXMLデータを順次処理
+    t, err := decoder.Token()  // 各処理でdecoderからトークン（Token）を取得
+    if err == io.EOF {
+      break
+    }
+    if err != nil {
+      fmt.Println("Error decoding XML into tokens:", err)
+      return
+    }
+
+    switch se := t.(type) { // トークンの型をチェック
+    case xml.StartElement:
+
+      if se.Name.Local == "comment" {
+	var comment Comment
+	decoder.DecodeElement(&comment, &se) // XMLデータを構造体にデコード
+      }
+    }
+  }
 }
