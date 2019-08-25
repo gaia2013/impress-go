@@ -3,7 +3,7 @@ package main
 import (
   "encoding/xml"
   "fmt"
-  "io/ioutil"
+  "os"
 )
 
 type Post struct {
@@ -19,22 +19,26 @@ type Author struct {
 }
 
 func main() {
-  post := Post{	//  データを入れて構造体を作成する
+  post	:=  Post{ //  データの入った構造体を作成する
     Id:	      "1",
     Content:  "Hello World!",
-    Author: Author{
+    Author:   Author{
       Id:   "2",
       Name: "Sau Sheong",
     },
   }
-  output, err := xml.MarshalIndent(&post, "", "\t") //	構造体を組み替えて(marshal)バイト列のXMLデータにする
+
+  xmlFile, err := os.Create("post.xml")	//  データを保存するXMLファイルを作成する
   if err != nil {
-    fmt.Println("Error marshalling to XML:", err)
+    fmt.Println("Error creating XML file:", err)
     return
   }
-  err = ioutil.WriteFile("post.xml", []byte(xml.Header + string(output)), 0644)
+  encoder := xml.NewEncoder(xmlFile)  //  XMLファイルに対してエンコーダを生成する
+  encoder.Indent("", "\t")
+  err = encoder.Encode(&post) //  構造体をファイルにエンコードする
   if err != nil {
-    fmt.Println("Error writing XML to file:", err)
+    fmt.Println("Error encoding XML to file:", err)
     return
   }
 }
+
