@@ -3,7 +3,7 @@ package main
 import (
   "encoding/json"
   "fmt"
-  "io/ioutil"
+  "os"
 )
 
 type Post struct {  //	データの入った構造体を作成
@@ -14,8 +14,8 @@ type Post struct {  //	データの入った構造体を作成
 }
 
 type Author struct {
-  Id	int	`json:"id"`
-  Name	string	`json:"name"`
+  Id	  int	  `json:"id"`
+  Name	  string  `json:"name"`
 }
 
 type Comment struct {
@@ -25,35 +25,37 @@ type Comment struct {
 }
 
 func main() {
-  post	:=  Post{
+  
+  post := Post{
     Id:	      1,
     Content:  "Hello World!",
-    Author:   Author{
-      Id:   2,
+    Author: Author{
+      Id: 2,
       Name: "Sau Sheong",
     },
     Comments: []Comment{
       Comment{
-	Id:	3,
-	Content: "Have a great day!",
+	Id:	  3,
+	Content:  "Have a great day!",
 	Author: "Adam",
       },
       Comment{
 	Id:	  4,
 	Content:  "How are you today?",
-	Author: "Betty",
+	Author:	  "Betty",
       },
     },
   }
 
-  output, err := json.MarshalIndent(&post, "", "\t\t")	//  構造体をバイト列のJSONデータに組み替え
+  jsonFile, err := os.Create("post.json") //  データを保存するためのJSONファイルを作成
   if err != nil {
-    fmt.Println("Error marshalling to JSON:", err)
+    fmt.Println("Error creating JSON file:", err)
     return
   }
-  err = ioutil.WriteFile("post.json", output, 0644)
+  encoder := json.NewEncoder(jsonFile)	//  JSONファイルに対してエンコーダを作成
+  err = encoder.Encode(&post) // 構造体をファイルにエンコード
   if err != nil {
-    fmt.Println("Error writing JSON to file:", err)
+    fmt.Println("Error encoding JSON to file:", err)
     return
   }
 }
