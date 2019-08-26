@@ -3,7 +3,7 @@ package main
 import (
   "encoding/json"
   "fmt"
-  "io/ioutil"
+  "io"
   "os"
 )
 
@@ -32,13 +32,18 @@ func main() {
     return
   }
   defer	jsonFile.Close()
-  jsonData, err := ioutil.ReadAll(jsonFile)
-  if err != nil {
-    fmt.Println("Error reading JSON data:", err)
-    return
+  
+  decoder := json.NewDecoder(jsonFile)
+  for {
+    var post Post
+    err := decoder.Decode(&post)
+    if err == io.EOF {
+      break
+    }
+    if err != nil {
+      fmt.Println("Error decoding JSON:", err)
+      return
+    }
+   fmt.Println(post)
   }
-
-  var post Post
-  json.Unmarshal(jsonData, &post) //  JSONデータを構造体に格納
-  fmt.Println(post)
 }
